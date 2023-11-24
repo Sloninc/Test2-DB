@@ -7,6 +7,42 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0">
+            <TabItem Name="Tests">
+                <TabItem.Header>
+                    <TextBlock Text="Тесты"/>
+                </TabItem.Header>
+                <ListView>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="TestID"/>
+                            <GridViewColumn Header="TestDate"/>
+                            <GridViewColumn Header="BlockName"/>
+                            <GridViewColumn Header="Note"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            <TabItem Name="Parameters">
+                <TabItem.Header>
+                    <TextBlock Text="Параметры"/>
+                </TabItem.Header>
+                <ListView>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="ParameterId"/>
+                            <GridViewColumn Header="TestId"/>
+                            <GridViewColumn Header="ParameterName"/>
+                            <GridViewColumn Header="RequiredValue"/>
+                            <GridViewColumn Header="MeasuredValue"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
