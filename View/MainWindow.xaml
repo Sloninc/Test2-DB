@@ -14,7 +14,7 @@
         <TabControl Grid.Row="0">
             <TabItem Name="Tests">
                 <TabItem.Header>
-                    <TextBlock Text="Тесты"/>
+                    <TextBlock Text="Tests"/>
                 </TabItem.Header>
                 <ListView>
                     <ListView.View>
@@ -29,7 +29,7 @@
             </TabItem>
             <TabItem Name="Parameters">
                 <TabItem.Header>
-                    <TextBlock Text="Параметры"/>
+                    <TextBlock Text="Parameters"/>
                 </TabItem.Header>
                 <ListView>
                     <ListView.View>
