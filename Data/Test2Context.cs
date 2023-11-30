@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Test2.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace Test2.Model.Data
+namespace Test2.Data
 {
     public partial class Test2Context : DbContext
     {
@@ -25,7 +26,7 @@ namespace Test2.Model.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Test2;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer(App.Config.GetConnectionString("DataBase"));
             }
         }
 

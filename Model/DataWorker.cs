@@ -8,6 +8,20 @@ namespace Test2.Model
 {
     public static class DataWorker
     {
+        public static List<Test> GetAllTests()
+        {
+            using(Test2Context db = new Test2Context())
+            {
+                return db.Tests.ToList();
+            }
+        }
+        public static List<Parameter> GetAllParameters()
+        {
+            using (Test2Context db = new Test2Context())
+            {
+                return db.Parameters.ToList();
+            }
+        }
         public static string CreateTest(string blockName, string note = null)
         {
             using(Test2Context db=new Test2Context())

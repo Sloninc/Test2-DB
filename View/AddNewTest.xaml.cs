@@ -10,14 +10,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Test2.ViewModel
+namespace Test2.View
 {
     /// <summary>
-    /// Логика взаимодействия для EditTest.xaml
+    /// Логика взаимодействия для AddNewTest.xaml
     /// </summary>
-    public partial class EditTest : Window
+    public partial class AddNewTest : Window
     {
-        public EditTest()
+        public AddNewTest()
         {
             InitializeComponent();
         }

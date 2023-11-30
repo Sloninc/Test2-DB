@@ -1,11 +1,11 @@
-﻿<Window x:Class="Test2.ViewModel.AddNewParameter"
+﻿<Window x:Class="Test2.View.Edit_parameter"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.ViewModel"
         mc:Ignorable="d"
-        Title="AddNewParameter" Height="300" Width="300">
+        Title="Edit_parameter" Height="300" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -16,13 +16,13 @@
                     VerticalAlignment="Center">
             <TextBlock Text="Select test"/>
             <ComboBox/>
-            <TextBlock Text="ParameterName"/>
+            <TextBlock Text="Parameter Name"/>
             <TextBox Text=""/>
-            <TextBlock Text="RequiredValue"/>
+            <TextBlock Text="Required Value"/>
             <TextBox Text=""/>
-            <TextBlock Text="MeasuredValue"/>
+            <TextBlock Text="Measured Value"/>
             <TextBox Text=""/>
         </StackPanel>
-        <Button Grid.Row="1" Content="Add parameter"/>
+        <Button Grid.Row="1" Content="Edit parameter"/>
     </Grid>
 </Window>

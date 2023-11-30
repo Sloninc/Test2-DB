@@ -10,14 +10,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Test2.ViewModel
+namespace Test2.View
 {
     /// <summary>
-    /// Логика взаимодействия для MessageView.xaml
+    /// Логика взаимодействия для Edit_parameter.xaml
     /// </summary>
-    public partial class MessageView : Window
+    public partial class Edit_parameter : Window
     {
-        public MessageView()
+        public Edit_parameter()
         {
             InitializeComponent();
         }
