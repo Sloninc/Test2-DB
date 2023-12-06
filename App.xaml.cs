@@ -3,9 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Test2.View;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Test2.Model.Data;
+using Test2.Data;
 using Test2.Services;
 using Test2.Services.Abstract;
+using Test2.ViewModel;
 
 using System.Windows;
 
@@ -27,6 +28,7 @@ namespace Test2
             .ConfigureServices((services) =>
             {
                 services.AddSingleton<MainWindow>();
+                services.AddScoped<Test2VM>();
                 services.AddDbContext<Test2Context>(opt => opt.UseSqlServer(Config.GetConnectionString("DataBase")));
                 services.AddScoped<ITestsService, TestsService>();
                 services.AddScoped<IParametersService,ParametersService>();

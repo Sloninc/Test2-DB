@@ -15,9 +15,9 @@ namespace Test2.View
     /// <summary>
     /// Логика взаимодействия для Edit_parameter.xaml
     /// </summary>
-    public partial class Edit_parameter : Window
+    public partial class EditParameter : Window
     {
-        public Edit_parameter()
+        public EditParameter()
         {
             InitializeComponent();
         }

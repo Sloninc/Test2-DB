@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Test2.Services
 {
-    internal class TestsService: ITestsService
+    public class TestsService: ITestsService
     {
         private readonly Test2Context _dbContext;
         public TestsService(Test2Context dbContext)

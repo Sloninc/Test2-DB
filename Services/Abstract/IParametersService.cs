@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Test2.Services.Abstract
 {
-    internal interface IParametersService
+    public interface IParametersService
     {
         /// <summary>
         /// Получить все параметры

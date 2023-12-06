@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Test2.Services.Abstract
 {
-    internal interface ITestsService
+    public interface ITestsService
     {
         /// <summary>
         /// Получить список всех тестов

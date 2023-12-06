@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Test2.Model.Data;
+using Test2.Data;
 using System.Linq;
 
 namespace Test2.Model

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Test2.ViewModel;
 
 namespace Test2.View
 {
@@ -20,9 +21,10 @@ namespace Test2.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(Test2VM test2VM)
         {
             InitializeComponent();
+            DataContext = test2VM;
         }
     }
 }

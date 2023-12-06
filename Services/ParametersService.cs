@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace Test2.Services
 {
-    internal class ParametersService : IParametersService
+    public class ParametersService : IParametersService
     {
         private readonly Test2Context _dbContext;
         public ParametersService(Test2Context dbContext)

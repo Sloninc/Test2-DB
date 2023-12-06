@@ -17,9 +17,16 @@ namespace Test2.View
     /// </summary>
     public partial class MessageView : Window
     {
-        public MessageView()
+        public MessageView(string text)
         {
             InitializeComponent();
+            MessageText.Text = text;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
+

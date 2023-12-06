@@ -16,13 +16,24 @@
                 <TabItem.Header>
                     <TextBlock Text="Tests"/>
                 </TabItem.Header>
-                <ListView>
+                <TabItem.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Редактировать" Command="{Binding OpenEditItemWnd}"/>
+                        <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
+                    </ContextMenu>
+                </TabItem.ContextMenu>
+                <ListView x:Name="AllTestsView" ItemsSource="{Binding AllTests}"
+                          SelectedItem="{Binding SelectedTest}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="TestID"/>
-                            <GridViewColumn Header="TestDate"/>
-                            <GridViewColumn Header="BlockName"/>
-                            <GridViewColumn Header="Note"/>
+                            <GridViewColumn Header="TestID"
+                                            DisplayMemberBinding="{Binding Path=TestID}"/>
+                            <GridViewColumn Header="TestDate"
+                                            DisplayMemberBinding="{Binding Path=TestDate}"/>
+                            <GridViewColumn Header="BlockName"
+                                            DisplayMemberBinding="{Binding Path=BlockName}"/>
+                            <GridViewColumn Header="Note"
+                                            DisplayMemberBinding="{Binding Path=Note}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -31,7 +42,7 @@
                 <TabItem.Header>
                     <TextBlock Text="Parameters"/>
                 </TabItem.Header>
-                <ListView>
+                <ListView ItemsSource="{Binding AllParameters}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="ParameterId"/>
@@ -44,5 +55,11 @@
                 </ListView>
             </TabItem>
         </TabControl>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
+            <Button Content="Новый тест" Command="{Binding OpenAddNewTestWnd}"/>
+            <Button Content="Новый параметр" Command="{Binding OpenAddNewParameterWnd}"/>
+        </StackPanel>
+                    
     </Grid>
 </Window>
