@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Test2.ViewModel;
 
 namespace Test2.View
 {
@@ -17,9 +18,10 @@ namespace Test2.View
     /// </summary>
     public partial class AddNewTest : Window
     {
-        public AddNewTest()
+        public AddNewTest(Test2VM test2VM)
         {
             InitializeComponent();
+            DataContext = test2VM;
         }
     }
 }

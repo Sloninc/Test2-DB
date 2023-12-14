@@ -33,7 +33,7 @@ namespace Test2.Services.Abstract
         /// </summary>
         /// <param name="parameter">параметр</param>
         /// <returns></returns>
-        public int Create(Parameter parameter);
+        public Parameter Create(Parameter parameter);
         /// <summary>
         /// Изменить параметр
         /// </summary>

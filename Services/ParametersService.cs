@@ -41,14 +41,14 @@ namespace Test2.Services
                 Count();
             return count;
         }
-        public int Create(Parameter parameter)
+        public Parameter Create(Parameter parameter)
         {
             var test = _dbContext.Tests.FirstOrDefault(x => x.TestId == parameter.TestId);
             if (test != null)
             {
                 _dbContext.Parameters.Add(parameter);
                 _dbContext.SaveChanges();
-                return parameter.ParameterId;
+                return parameter;
             }
             else throw new Exception();
         }

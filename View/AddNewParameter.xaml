@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.ViewModel"
         mc:Ignorable="d"
-        Title="AddNewParameter" Height="300" Width="300">
+        Title="AddNewParameter" Height="300" Width="300"
+        Name="AddParameterWnd">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -15,14 +16,18 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
             <TextBlock Text="Select test"/>
-            <ComboBox/>
+            <ComboBox ItemsSource="{Binding AllTests}"
+                      DisplayMemberPath="BlockName"
+                      SelectedItem="{Binding TestVM}"/>
             <TextBlock Text="ParameterName"/>
-            <TextBox Text=""/>
+            <TextBox Name="ParameterName" Text="{Binding ParameterNameVM}"/>
             <TextBlock Text="RequiredValue"/>
-            <TextBox Text=""/>
+            <TextBox Text="{Binding RequiredValueVM}"/>
             <TextBlock Text="MeasuredValue"/>
-            <TextBox Text=""/>
+            <TextBox Text="{Binding MeasuredValueVM}"/>
         </StackPanel>
-        <Button Grid.Row="1" Content="Add parameter"/>
+        <Button Grid.Row="1" Content="Add parameter"
+                Command="{Binding AddNewParameter}"
+                CommandParameter="{Binding ElementName=AddParameterWnd}"/>
     </Grid>
 </Window>

@@ -22,12 +22,12 @@
                         <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
                     </ContextMenu>
                 </TabItem.ContextMenu>
-                <ListView x:Name="AllTestsView" ItemsSource="{Binding AllTests}"
+                <ListView ItemsSource="{Binding AllTests}"
                           SelectedItem="{Binding SelectedTest}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="TestID"
-                                            DisplayMemberBinding="{Binding Path=TestID}"/>
+                                            DisplayMemberBinding="{Binding Path=TestId}"/>
                             <GridViewColumn Header="TestDate"
                                             DisplayMemberBinding="{Binding Path=TestDate}"/>
                             <GridViewColumn Header="BlockName"
@@ -45,11 +45,16 @@
                 <ListView ItemsSource="{Binding AllParameters}">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="ParameterId"/>
-                            <GridViewColumn Header="TestId"/>
-                            <GridViewColumn Header="ParameterName"/>
-                            <GridViewColumn Header="RequiredValue"/>
-                            <GridViewColumn Header="MeasuredValue"/>
+                            <GridViewColumn Header="ParameterId"
+                                            DisplayMemberBinding="{Binding Path=ParameterId}"/>
+                            <GridViewColumn Header="TestId"
+                                            DisplayMemberBinding="{Binding Path=TestId}"/>
+                            <GridViewColumn Header="ParameterName"
+                                            DisplayMemberBinding="{Binding Path=ParameterName}"/>
+                            <GridViewColumn Header="RequiredValue"
+                                            DisplayMemberBinding="{Binding Path=RequiredValue}"/>
+                            <GridViewColumn Header="MeasuredValue"
+                                            DisplayMemberBinding="{Binding Path=MeasuredValue}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

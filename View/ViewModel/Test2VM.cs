@@ -20,12 +20,13 @@ namespace Test2.ViewModel
         private readonly ITestsService _testsService;
         private readonly IParametersService _parametersService;
         private List<Test> _allTests;
-        //private List<Parameter> _allParameters;
+        private List<Parameter> _allParameters;
         public Test2VM(ITestsService testsService, IParametersService parametersService)
         {
             _testsService = testsService;
             _parametersService = parametersService;
             _allTests = _testsService.GetAll();
+            _allParameters = _parametersService.GetAll();
         }
         public List<Test> AllTests
         {
@@ -36,22 +37,40 @@ namespace Test2.ViewModel
                 NotifyPropertyChanged("AllTests");
             }
         }
-        //public List<Parameter> AllParameters
-        //{
-        //    get
-        //    {
-        //        return _allParameters;
-        //    }
-        //    private set
-        //    {
-        //        _allParameters = value;
-        //        NotifyPropertyChanged("AllParameters");
-        //    }
-        //}
+        public List<Parameter> AllParameters
+        {
+            get
+            {
+                return _allParameters;
+            }
+            private set
+            {
+                _allParameters = value;
+                NotifyPropertyChanged("AllParameters");
+            }
+        }
         //свойства для Теста
-        //public DateTime TestDateVM { get; set; }
+        private DateTime _testDateVM;
+        public DateTime TestDateVM { get
+            {
+                if(_testDateVM==DateTime.MinValue)
+                return _testDateVM=DateTime.UtcNow;
+                else return _testDateVM;
+            } 
+            set
+            {
+                _testDateVM = value;    
+            }
+        }
         public string BlockNameVM { get; set; }
         public string NoteVM { get; set; }
+
+        //свойства для Параметра
+        //public int TestIdVM { get; set; }
+        public string ParameterNameVM { get; set; }
+        public decimal RequiredValueVM { get; set; }
+        public decimal MeasuredValueVM { get; set; }
+        public Test TestVM { get; set; }
 
         private RelayCommand _addNewTest;
         public RelayCommand AddNewTest
@@ -64,12 +83,38 @@ namespace Test2.ViewModel
                     string resultStr = "";
                     if (BlockNameVM == null || BlockNameVM.Replace(" ", "").Length == 0)
                     {
-                        SetRedBlockControll(wnd, "NameBlock");
+                        SetRedBlockControll(wnd, "BlockName");
                     }
                     else
                     {
-                        var test = _testsService.Create(new Test { TestDate = DateTime.UtcNow, BlockName = BlockNameVM, Note = NoteVM });
+                        var test = _testsService.Create(new Test { TestDate = TestDateVM, BlockName = BlockNameVM, Note = NoteVM });
                         resultStr = $"Тест {test.TestId} для {test.BlockName} создан";
+                        UpdateAllDataView();
+                        ShowMessageToUser(resultStr);
+                        SetNullValuesToProperties();
+                        wnd.Close();
+                    }
+                }
+                );
+            }
+        }
+        private RelayCommand _addNewParameter;
+        public RelayCommand AddNewParameter
+        {
+            get
+            {
+                return _addNewParameter ?? new RelayCommand(obj =>
+                {
+                    Window wnd = obj as Window;
+                    string resultStr = "";
+                    if (ParameterNameVM == null || ParameterNameVM.Replace(" ", "").Length == 0)
+                    {
+                        SetRedBlockControll(wnd, "ParameterName");
+                    }
+                    else
+                    {
+                        var parameter = _parametersService.Create(new Parameter { TestId = TestVM.TestId, ParameterName = ParameterNameVM, RequiredValue = RequiredValueVM, MeasuredValue = MeasuredValueVM });
+                        resultStr = $"Параметр {parameter.ParameterName} создан";
                         UpdateAllDataView();
                         ShowMessageToUser(resultStr);
                         SetNullValuesToProperties();
@@ -126,12 +171,15 @@ namespace Test2.ViewModel
         private void SetNullValuesToProperties()
         {
             //для теста
+            _testDateVM = DateTime.MinValue;
             BlockNameVM = null;
             NoteVM = null;
         }
         private void UpdateAllDataView()
         {
-            UpdateAllTestsView();
+            AllTests = _testsService.GetAll();
+            AllParameters = _parametersService.GetAll();
+            //UpdateAllTestsView();
             //UpdateAllParametersView();
         }
         private RelayCommand _editTest;
@@ -148,7 +196,7 @@ namespace Test2.ViewModel
                     {
                         if (BlockNameVM != null)
                         {
-                            var test = _testsService.Update(new Test { BlockName = BlockNameVM, TestDate = DateTime.UtcNow, Note = NoteVM});
+                            var test = _testsService.Update(new Test { BlockName = BlockNameVM, TestDate = TestDateVM, Note = NoteVM});
                             resultStr = $"Тест {SelectedTest.TestId} для {SelectedTest.BlockName} изменен";
                             UpdateAllDataView();
                             SetNullValuesToProperties();
@@ -162,14 +210,10 @@ namespace Test2.ViewModel
                 );
             }
         }
-        private void UpdateAllTestsView()
-        {
-            AllTests = _testsService.GetAll();
-            //MainWindow.AllTestsView.ItemsSource = null;
-            //MainWindow.AllTestsView.Items.Clear();
-            //MainWindow.AllTestsView.ItemsSource = AllTests;
-            //MainWindow.AllTestsView.Items.Refresh();
-        }
+        //private void UpdateAllTestsView()
+        //{
+        //    AllTests = _testsService.GetAll();
+        //}
         private void ShowMessageToUser(string message)
         {
             MessageView messageView = new MessageView(message);
@@ -184,7 +228,7 @@ namespace Test2.ViewModel
                 {
                     OpenAddTestWindowMethod();
                 }
-                    );
+                );
             }
         }
         private RelayCommand openAddNewParameterWnd;
@@ -202,12 +246,12 @@ namespace Test2.ViewModel
         //методы открытия окон
         private void OpenAddTestWindowMethod()
         {
-            AddNewTest newTestWindow = new AddNewTest();
+            AddNewTest newTestWindow = new AddNewTest(this);
             SetCenterPositionAndOpen(newTestWindow);
         }
         private void OpenAddParameterWindowMethod()
         {
-            AddNewParameter newParameterWindow = new AddNewParameter();
+            AddNewParameter newParameterWindow = new AddNewParameter(this);
             SetCenterPositionAndOpen(newParameterWindow);
         }
         //методы редактирования окон
