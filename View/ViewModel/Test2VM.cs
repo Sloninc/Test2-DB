@@ -66,7 +66,6 @@ namespace Test2.ViewModel
         public string NoteVM { get; set; }
 
         //свойства для Параметра
-        //public int TestIdVM { get; set; }
         public string ParameterNameVM { get; set; }
         public decimal RequiredValueVM { get; set; }
         public decimal MeasuredValueVM { get; set; }
@@ -113,7 +112,8 @@ namespace Test2.ViewModel
                     }
                     else
                     {
-                        var parameter = _parametersService.Create(new Parameter { TestId = TestVM.TestId, ParameterName = ParameterNameVM, RequiredValue = RequiredValueVM, MeasuredValue = MeasuredValueVM });
+                        var parameter = _parametersService.Create(new Parameter { TestId = TestVM.TestId, ParameterName = ParameterNameVM, 
+                            RequiredValue = RequiredValueVM, MeasuredValue = MeasuredValueVM });
                         resultStr = $"Параметр {parameter.ParameterName} создан";
                         UpdateAllDataView();
                         ShowMessageToUser(resultStr);
@@ -133,7 +133,7 @@ namespace Test2.ViewModel
                 {
                     string resultStr = "Ничего не выбрано";
                     //если тест
-                    if (SelectedTabItem.Name == "TestTab" && SelectedTest != null)
+                    if (SelectedTabItem.Name == "Tests" && SelectedTest != null)
                     {
                         var isDeleted = _testsService.Delete(SelectedTest.TestId);
                         if (isDeleted)
@@ -143,7 +143,7 @@ namespace Test2.ViewModel
                         }
                     }
                     //если параметр
-                    if (SelectedTabItem.Name == "ParametersTab" && SelectedParameter != null)
+                    if (SelectedTabItem.Name == "Parameters" && SelectedParameter != null)
                     {
                         var isDeleted = _parametersService.Delete(SelectedParameter.ParameterId);
                         if (isDeleted)
@@ -174,14 +174,17 @@ namespace Test2.ViewModel
             _testDateVM = DateTime.MinValue;
             BlockNameVM = null;
             NoteVM = null;
+            ParameterNameVM = null;
+            RequiredValueVM = 0;
+            MeasuredValueVM = 0;
+            TestVM = null;
         }
         private void UpdateAllDataView()
         {
             AllTests = _testsService.GetAll();
             AllParameters = _parametersService.GetAll();
-            //UpdateAllTestsView();
-            //UpdateAllParametersView();
         }
+
         private RelayCommand _editTest;
         public RelayCommand EditTest
         {
@@ -191,29 +194,60 @@ namespace Test2.ViewModel
                 {
                     Window window = obj as Window;
                     string resultStr = "Не выбран тест";
-                    string noBlockNameStr = "Не выбран параметр";
                     if (SelectedTest != null)
                     {
-                        if (BlockNameVM != null)
+                        if (BlockNameVM == null || BlockNameVM.Replace(" ", "").Length == 0)
                         {
-                            var test = _testsService.Update(new Test { BlockName = BlockNameVM, TestDate = TestDateVM, Note = NoteVM});
+                            SetRedBlockControll(window, "BlockName");
+                        }
+                        else
+                        {
+                            var test = _testsService.Update(new Test { TestId = SelectedTest.TestId, BlockName = BlockNameVM, 
+                                TestDate = TestDateVM, Note = NoteVM });
                             resultStr = $"Тест {SelectedTest.TestId} для {SelectedTest.BlockName} изменен";
                             UpdateAllDataView();
                             SetNullValuesToProperties();
                             ShowMessageToUser(resultStr);
                             window.Close();
                         }
-                        else ShowMessageToUser(noBlockNameStr);
                     }
                     else ShowMessageToUser(resultStr);
                 }
                 );
             }
         }
-        //private void UpdateAllTestsView()
-        //{
-        //    AllTests = _testsService.GetAll();
-        //}
+        private RelayCommand _editParameter;
+        public RelayCommand EditParameter
+        {
+            get
+            {
+                return _editParameter ?? new RelayCommand(obj =>
+                {
+                    Window window = obj as Window;
+                    string resultStr = "Не выбран Параметр";
+                    if (SelectedParameter != null)
+                    {
+                        if (ParameterNameVM == null || ParameterNameVM.Replace(" ", "").Length == 0)
+                        {
+                            SetRedBlockControll(window, "ParameterName");
+                        }
+                        else
+                        {
+                            var parameter = _parametersService.Update(new Parameter { ParameterId = SelectedParameter.ParameterId, 
+                                TestId = SelectedParameter.TestId, ParameterName = ParameterNameVM, RequiredValue = RequiredValueVM,
+                                MeasuredValue = MeasuredValueVM });
+                            resultStr = $"Параметр {ParameterNameVM} изменен";
+                            UpdateAllDataView();
+                            SetNullValuesToProperties();
+                            ShowMessageToUser(resultStr);
+                            window.Close();
+                        }
+                    }
+                    else ShowMessageToUser(resultStr);
+                }
+                );
+            }
+        }
         private void ShowMessageToUser(string message)
         {
             MessageView messageView = new MessageView(message);
@@ -226,6 +260,7 @@ namespace Test2.ViewModel
             {
                 return openAddNewTestWnd ?? new RelayCommand(obj =>
                 {
+                    SetNullValuesToProperties();
                     OpenAddTestWindowMethod();
                 }
                 );
@@ -238,6 +273,7 @@ namespace Test2.ViewModel
             {
                 return openAddNewParameterWnd ?? new RelayCommand(obj =>
                 {
+                    SetNullValuesToProperties();
                     OpenAddParameterWindowMethod();
                 }
                 );
@@ -254,15 +290,43 @@ namespace Test2.ViewModel
             AddNewParameter newParameterWindow = new AddNewParameter(this);
             SetCenterPositionAndOpen(newParameterWindow);
         }
+        private RelayCommand openEditItemWnd;
+        public RelayCommand OpenEditItemWnd
+        {
+            get
+            {
+                return openEditItemWnd ?? new RelayCommand(obj =>
+                {
+                    string resultStr = "Ничего не выбрано";
+                    //если тест
+                    if (SelectedTabItem.Name == "Tests" && SelectedTest != null)
+                    {
+                        TestDateVM = DateTime.UtcNow;
+                        BlockNameVM = SelectedTest.BlockName;
+                        NoteVM = SelectedTest.Note;
+                        OpenEditTestWindowMethod();
+                    }
+                    //если параметер
+                    if (SelectedTabItem.Name == "Parameters" && SelectedParameter != null)
+                    {
+                        ParameterNameVM = SelectedParameter.ParameterName;
+                        RequiredValueVM = SelectedParameter.RequiredValue;
+                        MeasuredValueVM = SelectedParameter.MeasuredValue;
+                        OpenEditParameterWindowMethod();
+                    }
+                }
+                    );
+            }
+        }
         //методы редактирования окон
         private void OpenEditTestWindowMethod()
         {
-            EditTest editTestWindow = new EditTest();
+            EditTest editTestWindow = new EditTest(this);
             SetCenterPositionAndOpen(editTestWindow);
         }
         private void OpenEditParameterWindowMethod()
         {
-            EditParameter editParameterWindow = new EditParameter();
+            EditParameter editParameterWindow = new EditParameter(this);
             SetCenterPositionAndOpen(editParameterWindow);
         }
         private void SetCenterPositionAndOpen(Window window)

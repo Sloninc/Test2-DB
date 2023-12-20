@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.ViewModel"
         mc:Ignorable="d"
-        Title="EditParameter" Height="300" Width="300">
+        Title="EditParameter" Height="300" Width="300"
+        Name="EditParameterWnd">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -14,15 +15,15 @@
         <StackPanel Grid.Row="0" Orientation="Vertical"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
-            <TextBlock Text="Select test"/>
-            <ComboBox/>
             <TextBlock Text="Parameter Name"/>
-            <TextBox Text=""/>
+            <TextBox Name="ParameterName" Text="{Binding ParameterNameVM}" Width="152"/>
             <TextBlock Text="Required Value"/>
-            <TextBox Text=""/>
+            <TextBox Text="{Binding RequiredValueVM}"/>
             <TextBlock Text="Measured Value"/>
-            <TextBox Text=""/>
+            <TextBox Text="{Binding MeasuredValueVM}"/>
         </StackPanel>
-        <Button Grid.Row="1" Content="Edit parameter"/>
+        <Button Content="Edit parameter"
+                 Command="{Binding EditParameter}"
+                CommandParameter="{Binding ElementName=EditParameterWnd}" Margin="86,3,93,12" Grid.Row="1"/>
     </Grid>
 </Window>

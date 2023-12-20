@@ -5,13 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        ResizeMode="NoResize" 
+        Title="MainWindow" Height="450" Width="850">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0">
+        <TabControl Grid.Row="0" SelectedItem="{Binding SelectedTabItem}">
             <TabItem Name="Tests">
                 <TabItem.Header>
                     <TextBlock Text="Tests"/>
@@ -22,18 +23,50 @@
                         <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
                     </ContextMenu>
                 </TabItem.ContextMenu>
-                <ListView ItemsSource="{Binding AllTests}"
-                          SelectedItem="{Binding SelectedTest}">
+                <ListView x:Name="Test" ItemsSource="{Binding AllTests}"
+                          SelectedItem="{Binding SelectedTest}" 
+                          GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="TestID"
                                             DisplayMemberBinding="{Binding Path=TestId}"/>
                             <GridViewColumn Header="TestDate"
-                                            DisplayMemberBinding="{Binding Path=TestDate}"/>
+                                            DisplayMemberBinding="{Binding Path=TestDate}"
+                                            Width="100"/>
                             <GridViewColumn Header="BlockName"
-                                            DisplayMemberBinding="{Binding Path=BlockName}"/>
+                                            Width="250">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=BlockName}">
+                                            <TextBlock.ToolTip>
+                                                <ToolTip>
+                                                    <TextBlock Text="{Binding Path=BlockName}"
+                                                               MaxHeight="1000"
+                                                               MaxWidth="300"
+                                                               TextWrapping="Wrap"/>
+                                                </ToolTip>
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Header="Note"
-                                            DisplayMemberBinding="{Binding Path=Note}"/>
+                                            Width="400">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Note}">
+                                            <TextBlock.ToolTip>
+                                                <ToolTip>
+                                                    <TextBlock Text="{Binding Path=Note}"
+                                                               MaxHeight="1000"
+                                                               MaxWidth="300"
+                                                               TextWrapping="Wrap"/>
+                                                </ToolTip>
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -42,7 +75,15 @@
                 <TabItem.Header>
                     <TextBlock Text="Parameters"/>
                 </TabItem.Header>
-                <ListView ItemsSource="{Binding AllParameters}">
+                <TabItem.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Редактировать" Command="{Binding OpenEditItemWnd}"/>
+                        <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
+                    </ContextMenu>
+                </TabItem.ContextMenu>
+                <ListView x:Name="Parameter" ItemsSource="{Binding AllParameters}"
+                          SelectedItem="{Binding SelectedParameter}"
+                          GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="ParameterId"
@@ -61,10 +102,9 @@
             </TabItem>
         </TabControl>
         <StackPanel Grid.Row="1" Orientation="Horizontal" 
-                    HorizontalAlignment="Right">
-            <Button Content="Новый тест" Command="{Binding OpenAddNewTestWnd}"/>
-            <Button Content="Новый параметр" Command="{Binding OpenAddNewParameterWnd}"/>
-        </StackPanel>
-                    
+                    HorizontalAlignment="Right"/>
+        <Button Content="Новый тест" Command="{Binding OpenAddNewTestWnd}" Margin="263,5,427,11" Grid.Row="1"/>
+        <Button Content="Новый параметр" Command="{Binding OpenAddNewParameterWnd}" Margin="398,6,260,11" Grid.Row="1"/>
+
     </Grid>
 </Window>

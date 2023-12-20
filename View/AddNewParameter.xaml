@@ -18,7 +18,7 @@
             <TextBlock Text="Select test"/>
             <ComboBox ItemsSource="{Binding AllTests}"
                       DisplayMemberPath="BlockName"
-                      SelectedItem="{Binding TestVM}"/>
+                      SelectedItem="{Binding TestVM}" Width="171"/>
             <TextBlock Text="ParameterName"/>
             <TextBox Name="ParameterName" Text="{Binding ParameterNameVM}"/>
             <TextBlock Text="RequiredValue"/>
@@ -26,8 +26,8 @@
             <TextBlock Text="MeasuredValue"/>
             <TextBox Text="{Binding MeasuredValueVM}"/>
         </StackPanel>
-        <Button Grid.Row="1" Content="Add parameter"
+        <Button Content="Add parameter"
                 Command="{Binding AddNewParameter}"
-                CommandParameter="{Binding ElementName=AddParameterWnd}"/>
+                CommandParameter="{Binding ElementName=AddParameterWnd}" Margin="82,9,85,13" Grid.Row="1"/>
     </Grid>
 </Window>

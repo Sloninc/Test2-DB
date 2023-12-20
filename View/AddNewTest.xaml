@@ -22,8 +22,8 @@
             <TextBlock Text="Note" TextWrapping="Wrap"/>
             <TextBox Text="{Binding NoteVM}"  Width="192" Height="103"/>
         </StackPanel>
-        <Button Grid.Row="1" Content="Add test" 
+        <Button Content="Add test" 
                 Command="{Binding AddNewTest}"
-                CommandParameter="{Binding ElementName=AddTestWnd}"/>
+                CommandParameter="{Binding ElementName=AddTestWnd}" Margin="92,1,95,14" Grid.Row="1"/>
     </Grid>
 </Window>
