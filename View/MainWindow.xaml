@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.View"
         mc:Ignorable="d"
-        ResizeMode="NoResize" 
         Title="MainWindow" Height="450" Width="850">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,7 +14,11 @@
         <TabControl Grid.Row="0" SelectedItem="{Binding SelectedTabItem}">
             <TabItem Name="Tests">
                 <TabItem.Header>
-                    <TextBlock Text="Tests"/>
+                    <TextBlock Text="Tests">
+                        <TextBlock.ContextMenu>
+                            <ContextMenu Visibility="Hidden"/>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
                 </TabItem.Header>
                 <TabItem.ContextMenu>
                     <ContextMenu>
@@ -24,20 +27,38 @@
                     </ContextMenu>
                 </TabItem.ContextMenu>
                 <ListView x:Name="Test" ItemsSource="{Binding AllTests}"
-                          SelectedItem="{Binding SelectedTest}" 
-                          GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler">
+                          SelectedItem="{Binding SelectedTest}"
+                          GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
+                          MouseDoubleClick ="Test_MouseDoubleClick"
+                          ContextMenuOpening="ContextMenu_ContextMenuOpening">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="TestID"
-                                            DisplayMemberBinding="{Binding Path=TestId}"/>
-                            <GridViewColumn Header="TestDate"
-                                            DisplayMemberBinding="{Binding Path=TestDate}"
-                                            Width="100"/>
-                            <GridViewColumn Header="BlockName"
-                                            Width="250">
+                            <GridView.ColumnHeaderContextMenu>
+                                <ContextMenu Visibility="Hidden"/>
+                            </GridView.ColumnHeaderContextMenu>
+                            <GridViewColumn>
+                                <TextBlock Text="TestId" TextTrimming="CharacterEllipsis"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=BlockName}">
+                                        <TextBlock Text="{Binding Path=TestId}" TextTrimming="CharacterEllipsis">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="100">
+                                <TextBlock Text="TestDate" TextTrimming="CharacterEllipsis"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=TestDate}" TextTrimming="CharacterEllipsis">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="250">
+                                <TextBlock Text="BlockName" TextTrimming="CharacterEllipsis"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=BlockName}" TextTrimming="CharacterEllipsis">
                                             <TextBlock.ToolTip>
                                                 <ToolTip>
                                                     <TextBlock Text="{Binding Path=BlockName}"
@@ -50,11 +71,11 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Note"
-                                            Width="400">
+                            <GridViewColumn Width="400">
+                                <TextBlock Text="Note" TextTrimming="CharacterEllipsis"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Note}">
+                                        <TextBlock Text="{Binding Path=Note}" TextTrimming="CharacterEllipsis">
                                             <TextBlock.ToolTip>
                                                 <ToolTip>
                                                     <TextBlock Text="{Binding Path=Note}"
@@ -86,16 +107,59 @@
                           GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="ParameterId"
-                                            DisplayMemberBinding="{Binding Path=ParameterId}"/>
-                            <GridViewColumn Header="TestId"
-                                            DisplayMemberBinding="{Binding Path=TestId}"/>
-                            <GridViewColumn Header="ParameterName"
-                                            DisplayMemberBinding="{Binding Path=ParameterName}"/>
-                            <GridViewColumn Header="RequiredValue"
-                                            DisplayMemberBinding="{Binding Path=RequiredValue}"/>
-                            <GridViewColumn Header="MeasuredValue"
-                                            DisplayMemberBinding="{Binding Path=MeasuredValue}"/>
+                            <GridViewColumn>
+                                <TextBlock Text="ParameterId" TextTrimming="CharacterEllipsis"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=ParameterId}" TextTrimming="CharacterEllipsis">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <TextBlock Text="TestId" TextTrimming="CharacterEllipsis"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=TestId}" TextTrimming="CharacterEllipsis">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <TextBlock Text="ParameterName" TextTrimming="CharacterEllipsis"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=ParameterName}" TextTrimming="CharacterEllipsis">
+                                            <TextBlock.ToolTip>
+                                                <ToolTip>
+                                                    <TextBlock Text="{Binding Path=ParameterName}"
+                                                               MaxHeight="1000"
+                                                               MaxWidth="300"
+                                                               TextWrapping="Wrap"/>
+                                                </ToolTip>
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <TextBlock Text="RequiredValue" TextTrimming="CharacterEllipsis"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=RequiredValue}" TextTrimming="CharacterEllipsis">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <TextBlock Text="MeasuredValue" TextTrimming="CharacterEllipsis"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=MeasuredValue}" TextTrimming="CharacterEllipsis">
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -105,6 +169,5 @@
                     HorizontalAlignment="Right"/>
         <Button Content="Новый тест" Command="{Binding OpenAddNewTestWnd}" Margin="263,5,427,11" Grid.Row="1"/>
         <Button Content="Новый параметр" Command="{Binding OpenAddNewParameterWnd}" Margin="398,6,260,11" Grid.Row="1"/>
-
     </Grid>
 </Window>

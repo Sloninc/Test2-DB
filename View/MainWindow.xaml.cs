@@ -25,6 +25,7 @@ namespace Test2.View
             var headerClicked = e.OriginalSource as GridViewColumnHeader;
             var listView = e.Source as ListView;
             ListSortDirection direction;
+            Test.SelectedItem = null;
 
             if (headerClicked != null)
             {
@@ -45,10 +46,10 @@ namespace Test2.View
                             direction = ListSortDirection.Ascending;
                         }
                     }
-
-                    var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
-                    var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
-
+                    //var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
+                    //var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
+                    var columnBinding = headerClicked.Column.Header as TextBlock;
+                    var sortBy = columnBinding?.Text;
                     Sort(sortBy, direction, listView);
 
                     if (direction == ListSortDirection.Ascending)
@@ -81,6 +82,31 @@ namespace Test2.View
             SortDescription sd = new SortDescription(sortBy, direction);
             dataView.SortDescriptions.Add(sd);
             dataView.Refresh();
+        }
+
+        private void Test_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var textBlock = e.OriginalSource as TextBlock;
+            var listView = e.Source as ListView;
+            if (listView.SelectedIndex < 0||textBlock==null)
+            {
+                Test.SelectedItem = null;
+                return;
+            }
+            var context = DataContext as Test2VM;
+            TestView testView = new TestView(context);
+            context.OpenTestViewWindowMethod();
+        }
+
+        private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var textBlock = e.OriginalSource as TextBlock;
+            if (textBlock == null)
+            {
+                Test.SelectedItem = null;
+                e.Handled= true;
+                return;
+            }
         }
     }
 }

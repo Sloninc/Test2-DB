@@ -5,6 +5,7 @@ using Test2.Services;
 using Test2.Services.Abstract;
 using Test2.Model;
 using System.Collections.Generic;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -14,9 +15,9 @@ namespace Test2.ViewModel
 {
     public class Test2VM:  INotifyPropertyChanged
     {
-        RelayCommand? addCommand;
-        RelayCommand? editCommand;
-        RelayCommand? deleteCommand;
+        //RelayCommand? addCommand;
+        //RelayCommand? editCommand;
+        //RelayCommand? deleteCommand;
         private readonly ITestsService _testsService;
         private readonly IParametersService _parametersService;
         private List<Test> _allTests;
@@ -48,6 +49,18 @@ namespace Test2.ViewModel
                 _allParameters = value;
                 NotifyPropertyChanged("AllParameters");
             }
+        }
+        public List<Parameter> TestParameters
+        {
+            get
+            {
+                return _parametersService.GetAllPerTest(SelectedTest.TestId);
+            }
+            //private set
+            //{
+            //    _allParameters = value;
+            //    NotifyPropertyChanged("AllParameters");
+            //}
         }
         //свойства для Теста
         private DateTime _testDateVM;
@@ -279,7 +292,25 @@ namespace Test2.ViewModel
                 );
             }
         }
+        //private RelayCommand openTestViewWnd;
+        //public RelayCommand OpenTestViewWnd
+        //{
+        //    get
+        //    {
+        //        return openTestViewWnd ?? new RelayCommand(obj =>
+        //        {
+        //            SetNullValuesToProperties();
+        //            OpenTestViewWindowMethod();
+        //        }
+        //        );
+        //    }
+        //}
         //методы открытия окон
+        public void OpenTestViewWindowMethod()
+        {
+            TestView testView = new TestView(this);
+            SetCenterPositionAndOpen(testView);
+        }
         private void OpenAddTestWindowMethod()
         {
             AddNewTest newTestWindow = new AddNewTest(this);
@@ -297,7 +328,7 @@ namespace Test2.ViewModel
             {
                 return openEditItemWnd ?? new RelayCommand(obj =>
                 {
-                    string resultStr = "Ничего не выбрано";
+                    
                     //если тест
                     if (SelectedTabItem.Name == "Tests" && SelectedTest != null)
                     {
