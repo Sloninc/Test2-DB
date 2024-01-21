@@ -5,16 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.ViewModel"
         mc:Ignorable="d"
-        Title="MessageView" Height="116" Width="200">
+        ResizeMode="NoResize"
+        Title="MessageView" Height="150" Width="400">
     <Grid Margin="0,0,0,-1">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="40.04"/>
         </Grid.RowDefinitions>
-        <TextBlock  x:Name="MessageText" Grid.Row="0" 
+        <TextBlock  x:Name="MessageText" TextAlignment="Center"
                    HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   TextWrapping="Wrap"/>
-        <Button Content="OK" Click="Button_Click" Margin="68,4,68,7" Grid.Row="1"/>
+                   VerticalAlignment="Bottom"
+                   LineHeight="Auto"
+                   Padding="5,10,5,10"
+                   TextWrapping="Wrap" Height="69" Width="374"/>
+        <Button Content="OK" Click="Button_Click" Margin="130,4,130,7" Grid.Row="1"/>
     </Grid>
 </Window>

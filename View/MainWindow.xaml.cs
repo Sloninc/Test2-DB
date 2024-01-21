@@ -18,7 +18,6 @@ namespace Test2.View
         }
         GridViewColumnHeader _lastHeaderClicked = null;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
-
         void GridViewColumnHeaderClickedHandler(object sender,
                                                 RoutedEventArgs e)
         {
@@ -86,9 +85,9 @@ namespace Test2.View
 
         private void Test_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            var textBlock = e.OriginalSource as TextBlock;
+            var block = e.OriginalSource as ScrollViewer;
             var listView = e.Source as ListView;
-            if (listView.SelectedIndex < 0||textBlock==null)
+            if (listView.SelectedIndex < 0||block!=null)
             {
                 Test.SelectedItem = null;
                 return;
@@ -100,11 +99,22 @@ namespace Test2.View
 
         private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            var textBlock = e.OriginalSource as TextBlock;
-            if (textBlock == null)
+            var textBlock = e.OriginalSource as ScrollViewer;
+            if (textBlock != null)
             {
                 Test.SelectedItem = null;
                 e.Handled= true;
+                return;
+            }
+        }
+
+        private void Parameter_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            var textBlock = e.OriginalSource as ScrollViewer;
+            if (textBlock != null)
+            {
+                Parameter.SelectedItem = null;
+                e.Handled = true;
                 return;
             }
         }

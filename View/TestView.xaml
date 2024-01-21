@@ -5,66 +5,80 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.View"
         mc:Ignorable="d"
-        Title="Parameters" Height="450" Width="800">
+        Title="Parameters" MinWidth="520" MinHeight="200" Height="450" Width="850">
     <Grid>
+        <Grid.Resources>
+            <Style x:Key="alternatingWithTriggers" TargetType="{x:Type ListViewItem}">
+                <Setter Property="Background" Value="White"/>
+                <Style.Triggers>
+                    <Trigger Property="ListView.AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="WhiteSmoke"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0">
-            <ListView x:Name="Parameter" ItemsSource="{Binding TestParameters}">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn>
-                            <TextBlock Text="ParameterId" TextTrimming="CharacterEllipsis"/>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=ParameterId}" TextTrimming="CharacterEllipsis">
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn>
-                            <TextBlock Text="ParameterName" TextTrimming="CharacterEllipsis"/>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=ParameterName}" TextTrimming="CharacterEllipsis">
-                                        <TextBlock.ToolTip>
-                                            <ToolTip>
-                                                <TextBlock Text="{Binding Path=ParameterName}"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="Parameter" ItemsSource="{Binding TestParameters}" Grid.Row="0" Grid.ColumnSpan="5"
+                   AlternationCount="2" ItemContainerStyle="{StaticResource alternatingWithTriggers}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn>
+                        <TextBlock Text="ParameterId" TextTrimming="CharacterEllipsis"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=ParameterId}" TextTrimming="CharacterEllipsis">
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="450">
+                        <TextBlock Text="ParameterName" TextTrimming="CharacterEllipsis"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=ParameterName}" TextTrimming="CharacterEllipsis">
+                                    <TextBlock.ToolTip>
+                                        <ToolTip>
+                                            <TextBlock Text="{Binding Path=ParameterName}"
                                                                MaxHeight="1000"
                                                                MaxWidth="300"
                                                                TextWrapping="Wrap"/>
-                                            </ToolTip>
-                                        </TextBlock.ToolTip>
+                                        </ToolTip>
+                                    </TextBlock.ToolTip>
                                         </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn>
-                            <TextBlock Text="RequiredValue" TextTrimming="CharacterEllipsis"/>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=RequiredValue}" TextTrimming="CharacterEllipsis">
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn>
-                            <TextBlock Text="MeasuredValue" TextTrimming="CharacterEllipsis"/>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=MeasuredValue}" TextTrimming="CharacterEllipsis">
-                                    </TextBlock>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </TabControl>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" 
-                    HorizontalAlignment="Right"/>
-        <Button Content="OK" Click="Button_Click" Margin="68,4,68,7" Grid.Row="1"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <TextBlock Text="RequiredValue" TextTrimming="CharacterEllipsis"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=RequiredValue}" TextTrimming="CharacterEllipsis">
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <TextBlock Text="MeasuredValue" TextTrimming="CharacterEllipsis"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=MeasuredValue}" TextTrimming="CharacterEllipsis">
+                                </TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="OK" Click="Button_Click"  Grid.Row="1" Grid.Column="2" Width="100" Height="35" HorizontalAlignment="Stretch"/>
     </Grid>
 </Window>

@@ -27,7 +27,14 @@ namespace Test2.Services
         public Test Create(Test test)
         {
             _dbContext.Tests.Add(test);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException)
+            {
+                return null;
+            }
             return test;
         }
         public bool Update(Test test)

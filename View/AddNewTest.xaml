@@ -3,27 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Test2.ViewModel"
+        xmlns:uc="clr-namespace:Test2.View" 
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="AddNewTest" Height="300" Width="300"
+        Title="AddNewTest" Height="300" Width="400"
+        ResizeMode="NoResize"
         Name="AddTestWnd">
-    <Grid>
+
+    <Grid RenderTransformOrigin="0.505,0.424">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Vertical"
+
+        <StackPanel Orientation="Vertical"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-            <TextBlock Text="TestDate"/>
-            <TextBox Text="{Binding TestDateVM}"/>
-            <TextBlock Text="BlockName"/>
-            <TextBox Name="BlockName" Text="{Binding BlockNameVM}"/>
-            <TextBlock Text="Note" TextWrapping="Wrap"/>
-            <TextBox Text="{Binding NoteVM}"  Width="192" Height="103"/>
+                    VerticalAlignment="Center" Width="354">
+            <TextBlock Text="TestDate" Height="19" Width="59" TextAlignment="Right"/>
+            <xctk:DateTimePicker Value="{Binding TestDateVM, StringFormat=\{0:dd.MM.yy H:mm\}}" 
+                                 AllowTextInput="False" AutoCloseCalendarOnTimeSelection="True" Width="192" HorizontalAlignment="Right"/>
+            <TextBlock Text="BlockName *">
+                <TextBlock Text="{Binding ElementName=BlockName, Path=Text.Length}" FontSize="9" Foreground="Gray" TextAlignment="Right" Width="104"/>
+                <TextBlock Text="/" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+                <TextBlock Text="{Binding ElementName=BlockName, Path=MaxLength}" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+            </TextBlock>
+            <TextBox Name="BlockName"  Text="{Binding BlockNameVM}" PreviewTextInput="BlockName_PreviewTextInput" MaxLength="50" Height="32" TextWrapping="Wrap" Width="351" VerticalScrollBarVisibility="Auto"/>
+            <TextBlock Text="Note">
+                <TextBlock Text="{Binding ElementName=Note, Path=Text.Length}" FontSize="9" Foreground="Gray" TextAlignment="Right" Width="141"/>
+                <TextBlock Text="/" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+                <TextBlock Text="{Binding ElementName=Note, Path=MaxLength}" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+            </TextBlock>
+            <TextBox Name="Note" Text="{Binding NoteVM}" Width="352" Height="91" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLength="200"/>
+            <TextBlock Text="(*) поле, обязательное для заполнения" Foreground="Red" FontSize="10"/>
         </StackPanel>
         <Button Content="Add test" 
                 Command="{Binding AddNewTest}"
-                CommandParameter="{Binding ElementName=AddTestWnd}" Margin="92,1,95,14" Grid.Row="1"/>
+                CommandParameter="{Binding ElementName=AddTestWnd}" Margin="125,1,125,14" Grid.Row="1"/>
     </Grid>
 </Window>

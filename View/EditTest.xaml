@@ -16,11 +16,11 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
             <TextBlock Text="Test Date"/>
-            <TextBox Text="{Binding TestDateVM}"/>
+            <TextBox Text="{Binding TestDateVM, StringFormat={}{0:dd.MM.yy H:mm}}"/>
             <TextBlock Text="Block Name"/>
             <TextBox Name="BlockName" Text="{Binding BlockNameVM}"/>
-            <TextBlock Text="Note" TextWrapping="Wrap"/>
-            <TextBox Text="{Binding NoteVM}" Height="73" Width="220"/>
+            <TextBlock Text="Note"/>
+            <TextBox Text="{Binding NoteVM}" TextWrapping="Wrap" Height="73" Width="220"/>
         </StackPanel>
         <Button Content="Edit test"
                  Command="{Binding EditTest}"

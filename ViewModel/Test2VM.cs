@@ -13,11 +13,13 @@ using Test2.Infrastructure;
 
 namespace Test2.ViewModel
 {
+    public enum ChoiceBorderColor
+    {
+        red,
+        grey
+    }
     public class Test2VM:  INotifyPropertyChanged
     {
-        //RelayCommand? addCommand;
-        //RelayCommand? editCommand;
-        //RelayCommand? deleteCommand;
         private readonly ITestsService _testsService;
         private readonly IParametersService _parametersService;
         private List<Test> _allTests;
@@ -67,7 +69,7 @@ namespace Test2.ViewModel
         public DateTime TestDateVM { get
             {
                 if(_testDateVM==DateTime.MinValue)
-                return _testDateVM=DateTime.UtcNow;
+                return _testDateVM=DateTime.Now;
                 else return _testDateVM;
             } 
             set
@@ -80,8 +82,45 @@ namespace Test2.ViewModel
 
         //свойства для Параметра
         public string ParameterNameVM { get; set; }
-        public decimal RequiredValueVM { get; set; }
-        public decimal MeasuredValueVM { get; set; }
+
+        private decimal? _requiredValueVM;
+        public decimal? RequiredValueVM
+        {
+            get
+            {
+                return _requiredValueVM;
+            }
+            set
+            {
+                if (value < 0.000001m)
+                    _requiredValueVM = 0;
+                else if(value > 999999999999999999m)
+                {
+                    ShowMessageToUser("Превышен допустимый диапазон.");
+                }
+                else
+                    _requiredValueVM = value;
+            }
+        }
+        private decimal? _measuredValueVM;
+        public decimal? MeasuredValueVM
+        {
+            get
+            {
+                return _measuredValueVM;
+            }
+            set
+            {
+                if (value < 0.000001m)
+                    _measuredValueVM= 0;
+                else if (value > 999999999999999999m)
+                {
+                    ShowMessageToUser("Превышен допустимый диапазон.");
+                }
+                else
+                    _measuredValueVM = value;
+            }
+        }
         public Test TestVM { get; set; }
 
         private RelayCommand _addNewTest;
@@ -95,12 +134,12 @@ namespace Test2.ViewModel
                     string resultStr = "";
                     if (BlockNameVM == null || BlockNameVM.Replace(" ", "").Length == 0)
                     {
-                        SetRedBlockControll(wnd, "BlockName");
+                        SetColorBlockControll(wnd, "BlockName", ChoiceBorderColor.red);
                     }
                     else
                     {
                         var test = _testsService.Create(new Test { TestDate = TestDateVM, BlockName = BlockNameVM, Note = NoteVM });
-                        resultStr = $"Тест {test.TestId} для {test.BlockName} создан";
+                        resultStr = $"Тест {test.TestId} для блока:\n {test.BlockName}\n создан";
                         UpdateAllDataView();
                         ShowMessageToUser(resultStr);
                         SetNullValuesToProperties();
@@ -118,24 +157,69 @@ namespace Test2.ViewModel
                 return _addNewParameter ?? new RelayCommand(obj =>
                 {
                     Window wnd = obj as Window;
-                    string resultStr = "";
-                    if (ParameterNameVM == null || ParameterNameVM.Replace(" ", "").Length == 0)
+                    try
                     {
-                        SetRedBlockControll(wnd, "ParameterName");
+                        string resultStr = "";
+                        if (IsFilledParameter(wnd))
+                        {
+                            var parameter = _parametersService.Create(new Parameter
+                            {
+                                TestId = TestVM.TestId,
+                                ParameterName = ParameterNameVM,
+                                RequiredValue = RequiredValueVM,
+                                MeasuredValue = MeasuredValueVM
+                            });
+                            resultStr = $"Параметр:\n {parameter.ParameterName}\n создан";
+                            UpdateAllDataView();
+                            ShowMessageToUser(resultStr);
+                            SetNullValuesToProperties();
+                            wnd.Close();
+                        }
                     }
-                    else
+                   catch(Exception ex)
                     {
-                        var parameter = _parametersService.Create(new Parameter { TestId = TestVM.TestId, ParameterName = ParameterNameVM, 
-                            RequiredValue = RequiredValueVM, MeasuredValue = MeasuredValueVM });
-                        resultStr = $"Параметр {parameter.ParameterName} создан";
-                        UpdateAllDataView();
-                        ShowMessageToUser(resultStr);
+                        if(ex.InnerException==null)
+                            ShowMessageToUser(ex.Message);
+                        else
+                            ShowMessageToUser(ex.InnerException.Message);
                         SetNullValuesToProperties();
                         wnd.Close();
                     }
                 }
                 );
             }
+        }
+        private bool IsFilledParameter(Window wnd)
+        {
+            bool isFilled = true;
+            if (TestVM == null)
+            {
+                isFilled = false;
+                var block = wnd.FindName("SelectedTest") as ComboBox;
+                block.Text = String.Empty;
+                ShowMessageToUser("Не выбран тест для добавляемого параметра");
+            }
+            if (ParameterNameVM == null || ParameterNameVM.Replace(" ", "").Length == 0)
+            {
+                isFilled = false;
+                SetColorBlockControll(wnd, "ParameterName", ChoiceBorderColor.red);
+            }
+            else SetColorBlockControll(wnd, "ParameterName", ChoiceBorderColor.grey);
+
+            if (RequiredValueVM == null)
+            {
+                isFilled = false;
+                SetColorBlockControll(wnd, "RequiredValue", ChoiceBorderColor.red);
+            }
+            else SetColorBlockControll(wnd, "RequiredValue", ChoiceBorderColor.grey);
+            if (MeasuredValueVM == null)
+            {
+                isFilled=false;
+                SetColorBlockControll(wnd, "MeasuredValue", ChoiceBorderColor.red);
+            }
+            else
+                SetColorBlockControll(wnd, "MeasuredValue", ChoiceBorderColor.grey);   
+            return isFilled;    
         }
         private RelayCommand deleteItem;
         public RelayCommand DeleteItem
@@ -151,7 +235,7 @@ namespace Test2.ViewModel
                         var isDeleted = _testsService.Delete(SelectedTest.TestId);
                         if (isDeleted)
                         {
-                            resultStr = $"Тест {SelectedTest.TestId} для {SelectedTest.BlockName} удален";
+                            resultStr = $"Тест {SelectedTest.TestId} для блока:\n {SelectedTest.BlockName}\n удален";
                             UpdateAllDataView();
                         }
                     }
@@ -161,7 +245,7 @@ namespace Test2.ViewModel
                         var isDeleted = _parametersService.Delete(SelectedParameter.ParameterId);
                         if (isDeleted)
                         {
-                            resultStr = $"Параметр {SelectedParameter.ParameterName} удален";
+                            resultStr = $"Параметр:\n {SelectedParameter.ParameterName}\n удален";
                             UpdateAllDataView();
                         }
                     }
@@ -176,10 +260,10 @@ namespace Test2.ViewModel
         public TabItem SelectedTabItem { get; set; }
         public static Test SelectedTest { get; set; }
         public static Parameter SelectedParameter { get; set; }
-        private void SetRedBlockControll(Window wnd, string blockName)
+        private void SetColorBlockControll(Window wnd, string blockName, ChoiceBorderColor choiceBorderColor)
         {
             Control block = wnd.FindName(blockName) as Control;
-            block.BorderBrush = Brushes.Red;
+            block.BorderBrush = choiceBorderColor==ChoiceBorderColor.red?Brushes.Red:Brushes.Gray;
         }
         private void SetNullValuesToProperties()
         {
@@ -188,8 +272,8 @@ namespace Test2.ViewModel
             BlockNameVM = null;
             NoteVM = null;
             ParameterNameVM = null;
-            RequiredValueVM = 0;
-            MeasuredValueVM = 0;
+            RequiredValueVM = null;
+            MeasuredValueVM = null;
             TestVM = null;
         }
         private void UpdateAllDataView()
@@ -211,13 +295,13 @@ namespace Test2.ViewModel
                     {
                         if (BlockNameVM == null || BlockNameVM.Replace(" ", "").Length == 0)
                         {
-                            SetRedBlockControll(window, "BlockName");
+                            SetColorBlockControll(window, "BlockName", ChoiceBorderColor.red);
                         }
                         else
                         {
                             var test = _testsService.Update(new Test { TestId = SelectedTest.TestId, BlockName = BlockNameVM, 
                                 TestDate = TestDateVM, Note = NoteVM });
-                            resultStr = $"Тест {SelectedTest.TestId} для {SelectedTest.BlockName} изменен";
+                            resultStr = $"Тест {SelectedTest.TestId} для блока:\n {SelectedTest.BlockName}\n изменен";
                             UpdateAllDataView();
                             SetNullValuesToProperties();
                             ShowMessageToUser(resultStr);
@@ -242,14 +326,14 @@ namespace Test2.ViewModel
                     {
                         if (ParameterNameVM == null || ParameterNameVM.Replace(" ", "").Length == 0)
                         {
-                            SetRedBlockControll(window, "ParameterName");
+                            SetColorBlockControll(window, "ParameterName", ChoiceBorderColor.red);
                         }
                         else
                         {
                             var parameter = _parametersService.Update(new Parameter { ParameterId = SelectedParameter.ParameterId, 
                                 TestId = SelectedParameter.TestId, ParameterName = ParameterNameVM, RequiredValue = RequiredValueVM,
                                 MeasuredValue = MeasuredValueVM });
-                            resultStr = $"Параметр {ParameterNameVM} изменен";
+                            resultStr = $"Параметр:\n {ParameterNameVM}\n изменен";
                             UpdateAllDataView();
                             SetNullValuesToProperties();
                             ShowMessageToUser(resultStr);
@@ -292,19 +376,7 @@ namespace Test2.ViewModel
                 );
             }
         }
-        //private RelayCommand openTestViewWnd;
-        //public RelayCommand OpenTestViewWnd
-        //{
-        //    get
-        //    {
-        //        return openTestViewWnd ?? new RelayCommand(obj =>
-        //        {
-        //            SetNullValuesToProperties();
-        //            OpenTestViewWindowMethod();
-        //        }
-        //        );
-        //    }
-        //}
+
         //методы открытия окон
         public void OpenTestViewWindowMethod()
         {
@@ -332,7 +404,7 @@ namespace Test2.ViewModel
                     //если тест
                     if (SelectedTabItem.Name == "Tests" && SelectedTest != null)
                     {
-                        TestDateVM = DateTime.UtcNow;
+                        TestDateVM = DateTime.Now;
                         BlockNameVM = SelectedTest.BlockName;
                         NoteVM = SelectedTest.Note;
                         OpenEditTestWindowMethod();

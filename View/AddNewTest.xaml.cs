@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Test2.ViewModel;
 
 namespace Test2.View
@@ -22,6 +15,12 @@ namespace Test2.View
         {
             InitializeComponent();
             DataContext = test2VM;
+        }
+        private void BlockName_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var a = DataContext as Test2VM;
+            a.ParameterNameVM = null;
+            BlockName.BorderBrush = Brushes.Gray;
         }
     }
 }

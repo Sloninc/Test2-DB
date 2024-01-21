@@ -5,13 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="850">
+        Title="MainWindow"  MinWidth="520" MinHeight="200" Height="450" Width="850">
     <Grid>
+        <Grid.Resources>
+            <Style x:Key="alternatingWithTriggers" TargetType="{x:Type ListViewItem}">
+                <Setter Property="Background" Value="White"/>
+                <Style.Triggers>
+                    <Trigger Property="ListView.AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="WhiteSmoke"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0" SelectedItem="{Binding SelectedTabItem}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TabControl Grid.Row="0" Grid.ColumnSpan="4" SelectedItem="{Binding SelectedTabItem}">
             <TabItem Name="Tests">
                 <TabItem.Header>
                     <TextBlock Text="Tests">
@@ -26,8 +43,8 @@
                         <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
                     </ContextMenu>
                 </TabItem.ContextMenu>
-                <ListView x:Name="Test" ItemsSource="{Binding AllTests}"
-                          SelectedItem="{Binding SelectedTest}"
+                <ListView x:Name="Test" AlternationCount="2" ItemsSource="{Binding AllTests}"
+                          SelectedItem="{Binding SelectedTest}" ItemContainerStyle="{StaticResource alternatingWithTriggers}"
                           GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
                           MouseDoubleClick ="Test_MouseDoubleClick"
                           ContextMenuOpening="ContextMenu_ContextMenuOpening">
@@ -36,7 +53,7 @@
                             <GridView.ColumnHeaderContextMenu>
                                 <ContextMenu Visibility="Hidden"/>
                             </GridView.ColumnHeaderContextMenu>
-                            <GridViewColumn>
+                            <GridViewColumn x:Name="TestIDColumn" Width="35">
                                 <TextBlock Text="TestId" TextTrimming="CharacterEllipsis"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -45,16 +62,16 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="100">
+                            <GridViewColumn x:Name="TestDateColumn" Width="100">
                                 <TextBlock Text="TestDate" TextTrimming="CharacterEllipsis"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=TestDate}" TextTrimming="CharacterEllipsis">
+                                        <TextBlock Text="{Binding Path=TestDate, StringFormat={}{0:dd.MM.yy H:mm}}" TextTrimming="CharacterEllipsis">
                                         </TextBlock>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="250">
+                            <GridViewColumn x:Name="BlockNameColumn" Width="250">
                                 <TextBlock Text="BlockName" TextTrimming="CharacterEllipsis"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -71,7 +88,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Width="400">
+                            <GridViewColumn x:Name="NoteColumn" Width="400">
                                 <TextBlock Text="Note" TextTrimming="CharacterEllipsis"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -94,7 +111,11 @@
             </TabItem>
             <TabItem Name="Parameters">
                 <TabItem.Header>
-                    <TextBlock Text="Parameters"/>
+                    <TextBlock Text="Parameters">
+                        <TextBlock.ContextMenu>
+                            <ContextMenu Visibility="Hidden"/>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
                 </TabItem.Header>
                 <TabItem.ContextMenu>
                     <ContextMenu>
@@ -102,11 +123,15 @@
                         <MenuItem Header="Удалить" Command="{Binding DeleteItem}"/>
                     </ContextMenu>
                 </TabItem.ContextMenu>
-                <ListView x:Name="Parameter" ItemsSource="{Binding AllParameters}"
-                          SelectedItem="{Binding SelectedParameter}"
-                          GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler">
+                <ListView x:Name="Parameter" ItemsSource="{Binding AllParameters}" ItemContainerStyle="{StaticResource alternatingWithTriggers}"
+                          SelectedItem="{Binding SelectedParameter}" AlternationCount="2"
+                          GridViewColumnHeader.Click="GridViewColumnHeaderClickedHandler"
+                          ContextMenuOpening="Parameter_ContextMenuOpening">
                     <ListView.View>
                         <GridView>
+                            <GridView.ColumnHeaderContextMenu>
+                                <ContextMenu Visibility="Hidden"/>
+                            </GridView.ColumnHeaderContextMenu>
                             <GridViewColumn>
                                 <TextBlock Text="ParameterId" TextTrimming="CharacterEllipsis"/>
                                 <GridViewColumn.CellTemplate>
@@ -165,9 +190,19 @@
                 </ListView>
             </TabItem>
         </TabControl>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" 
-                    HorizontalAlignment="Right"/>
-        <Button Content="Новый тест" Command="{Binding OpenAddNewTestWnd}" Margin="263,5,427,11" Grid.Row="1"/>
-        <Button Content="Новый параметр" Command="{Binding OpenAddNewParameterWnd}" Margin="398,6,260,11" Grid.Row="1"/>
+        <!--<StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Left" Margin="96,213,0,0" Width="542" Grid.Column="1" Grid.ColumnSpan="3" RenderTransformOrigin="0.5,0.5">
+            <StackPanel.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleY="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </StackPanel.RenderTransform>
+        </StackPanel>-->
+        <Button Content="Новый тест" Command="{Binding OpenAddNewTestWnd}" Grid.Row="1" Grid.Column="1" Width="124" Height="45" HorizontalAlignment="Stretch"/>
+        <Button Content="Новый параметр" Command="{Binding OpenAddNewParameterWnd}" Grid.Row="1" Grid.Column="2" Width="124" HorizontalAlignment="Stretch" Height="45"/>
+
     </Grid>
 </Window>

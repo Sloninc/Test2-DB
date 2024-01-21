@@ -5,29 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.ViewModel"
         mc:Ignorable="d"
-        Title="AddNewParameter" Height="300" Width="300"
+        Title="AddNewParameter" Height="300" Width="400"
+        ResizeMode="NoResize"
         Name="AddParameterWnd">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="202"/>
+            <RowDefinition Height="68"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Vertical"
+        <StackPanel Orientation="Vertical"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
+                    VerticalAlignment="Center" Height="172" Width="350" >
             <TextBlock Text="Select test"/>
-            <ComboBox ItemsSource="{Binding AllTests}"
-                      DisplayMemberPath="BlockName"
-                      SelectedItem="{Binding TestVM}" Width="171"/>
-            <TextBlock Text="ParameterName"/>
-            <TextBox Name="ParameterName" Text="{Binding ParameterNameVM}"/>
-            <TextBlock Text="RequiredValue"/>
-            <TextBox Text="{Binding RequiredValueVM}"/>
-            <TextBlock Text="MeasuredValue"/>
-            <TextBox Text="{Binding MeasuredValueVM}"/>
+            <ComboBox Name="SelectedTest" ItemsSource="{Binding AllTests}" IsEditable="True"
+                      DisplayMemberPath="BlockName" StaysOpenOnEdit="True"
+                      SelectedItem="{Binding TestVM}" Width="350">
+            </ComboBox>
+            <TextBlock Text="ParameterName *">
+                <TextBlock Text="{Binding ElementName=ParameterName, Path=Text.Length}" FontSize="9" Foreground="Gray" TextAlignment="Right" Width="230"/>
+                <TextBlock Text="/" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+                <TextBlock Text="{Binding ElementName=ParameterName, Path=MaxLength}" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+            </TextBlock>
+            <TextBox Name="ParameterName" Text="{Binding ParameterNameVM}" PreviewTextInput="ParameterName_PreviewTextInput" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLength="50" Width="350"/>
+            <TextBlock Text="RequiredValue *"/>
+            <TextBox Name="RequiredValue" Text="{Binding RequiredValueVM}" PreviewTextInput="RequiredValue_PreviewTextInput" Width="350"/>
+            <TextBlock Text="MeasuredValue *"/>
+            <TextBox Name="MeasuredValue" Text="{Binding MeasuredValueVM}" PreviewTextInput="MeasuredValue_PreviewTextInput" Width="350"/>
+            <TextBlock Text="(*) поля, обязательные для заполнения" Foreground="Red" FontSize="10"/>
         </StackPanel>
         <Button Content="Add parameter"
                 Command="{Binding AddNewParameter}"
-                CommandParameter="{Binding ElementName=AddParameterWnd}" Margin="82,9,85,13" Grid.Row="1"/>
+                CommandParameter="{Binding ElementName=AddParameterWnd}" Margin="138,201,138,26" Grid.RowSpan="2"/>
     </Grid>
 </Window>
