@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using Test2.ViewModel;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Test2.View
 {
@@ -12,6 +14,12 @@ namespace Test2.View
         {
             InitializeComponent();
             DataContext = test2VM;
+        }
+        private void BlockName_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var a = DataContext as Test2VM;
+            a.ParameterNameVM = null;
+            BlockName.BorderBrush = Brushes.Gray;
         }
     }
 }

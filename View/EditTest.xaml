@@ -2,25 +2,37 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.ViewModel"
         mc:Ignorable="d"
-        Title="EditTest" Height="300" Width="300"
+        Title="EditTest" Height="300" Width="400"
+        ResizeMode="NoResize"
         Name="EditTestWnd">
-    <Grid>
+    <Grid RenderTransformOrigin="0.505,0.424">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Vertical"
+        <StackPanel Orientation="Vertical"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-            <TextBlock Text="Test Date"/>
-            <TextBox Text="{Binding TestDateVM, StringFormat={}{0:dd.MM.yy H:mm}}"/>
-            <TextBlock Text="Block Name"/>
-            <TextBox Name="BlockName" Text="{Binding BlockNameVM}"/>
-            <TextBlock Text="Note"/>
-            <TextBox Text="{Binding NoteVM}" TextWrapping="Wrap" Height="73" Width="220"/>
+                    VerticalAlignment="Center" Width="354">
+            <TextBlock Text="TestDate" Height="19" Width="59" TextAlignment="Right"/>
+            <xctk:DateTimePicker Value="{Binding TestDateVM, StringFormat=\{0:dd.MM.yy H:mm\}}" 
+                                 AllowTextInput="False" AutoCloseCalendarOnTimeSelection="True" Width="192" HorizontalAlignment="Right"/>
+            <TextBlock Text="BlockName *">
+                <TextBlock Text="{Binding ElementName=BlockName, Path=Text.Length}" FontSize="9" Foreground="Gray" TextAlignment="Right" Width="263"/>
+                <TextBlock Text="/" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+                <TextBlock Text="{Binding ElementName=BlockName, Path=MaxLength}" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+            </TextBlock>
+            <TextBox Name="BlockName"  Text="{Binding BlockNameVM}" PreviewTextInput="BlockName_PreviewTextInput" MaxLength="50" Height="32" TextWrapping="Wrap" Width="351" VerticalScrollBarVisibility="Auto"/>
+            <TextBlock Text="Note">
+                <TextBlock Text="{Binding ElementName=Note, Path=Text.Length}" FontSize="9" Foreground="Gray" TextAlignment="Right" Width="300"/>
+                <TextBlock Text="/" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+                <TextBlock Text="{Binding ElementName=Note, Path=MaxLength}" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+            </TextBlock>
+            <TextBox Name="Note" Text="{Binding NoteVM}" Width="352" Height="91" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLength="200"/>
+            <TextBlock Text="(*) поле, обязательное для заполнения" Foreground="Red" FontSize="10"/>
         </StackPanel>
         <Button Content="Edit test"
                  Command="{Binding EditTest}"

@@ -69,7 +69,7 @@ namespace Test2.ViewModel
         public DateTime TestDateVM { get
             {
                 if(_testDateVM==DateTime.MinValue)
-                return _testDateVM=DateTime.Now;
+                    return _testDateVM=DateTime.Now;
                 else return _testDateVM;
             } 
             set
@@ -404,7 +404,7 @@ namespace Test2.ViewModel
                     //если тест
                     if (SelectedTabItem.Name == "Tests" && SelectedTest != null)
                     {
-                        TestDateVM = DateTime.Now;
+                        TestDateVM = SelectedTest.TestDate;
                         BlockNameVM = SelectedTest.BlockName;
                         NoteVM = SelectedTest.Note;
                         OpenEditTestWindowMethod();

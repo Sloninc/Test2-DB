@@ -5,25 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Test2.ViewModel"
         mc:Ignorable="d"
-        Title="EditParameter" Height="300" Width="300"
+        Title="EditParameter" Height="250" Width="400"
+        ResizeMode="NoResize"
         Name="EditParameterWnd">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="68"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Vertical"
+        <StackPanel Orientation="Vertical"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-            <TextBlock Text="Parameter Name"/>
-            <TextBox Name="ParameterName" Text="{Binding ParameterNameVM}" Width="152"/>
-            <TextBlock Text="Required Value"/>
-            <TextBox Text="{Binding RequiredValueVM}"/>
-            <TextBlock Text="Measured Value"/>
-            <TextBox Text="{Binding MeasuredValueVM}"/>
+                    VerticalAlignment="Center" Height="120" Width="350">
+            <TextBlock Text="ParameterName *">
+                <TextBlock Text="{Binding ElementName=ParameterName, Path=Text.Length}" FontSize="9" Foreground="Gray" TextAlignment="Right" Width="230"/>
+                <TextBlock Text="/" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+                <TextBlock Text="{Binding ElementName=ParameterName, Path=MaxLength}" FontSize="9" Foreground="Gray" TextAlignment="Right"/>
+            </TextBlock>
+            <TextBox Name="ParameterName" Text="{Binding ParameterNameVM}" PreviewTextInput="ParameterName_PreviewTextInput" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" MaxLength="50" Width="350"/>
+            <TextBlock Text="RequiredValue *"/>
+            <TextBox Name="RequiredValue" Text="{Binding RequiredValueVM}" PreviewTextInput="RequiredValue_PreviewTextInput" Width="350"/>
+            <TextBlock Text="MeasuredValue *"/>
+            <TextBox Name="MeasuredValue" Text="{Binding MeasuredValueVM}" PreviewTextInput="MeasuredValue_PreviewTextInput" Width="350"/>
+            <TextBlock Text="(*) поля, обязательные для заполнения" Foreground="Red" FontSize="10"/>
         </StackPanel>
         <Button Content="Edit parameter"
                  Command="{Binding EditParameter}"
-                CommandParameter="{Binding ElementName=EditParameterWnd}" Margin="86,3,93,12" Grid.Row="1"/>
+                CommandParameter="{Binding ElementName=EditParameterWnd}" Margin="138,1,138,27" Grid.Row="1"/>
     </Grid>
 </Window>

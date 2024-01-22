@@ -23,7 +23,26 @@ namespace Test2.View
         {
             InitializeComponent();
             DataContext = test2VM;
+        }
+        private void RequiredValue_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var a = DataContext as Test2VM;
+            a.RequiredValueVM = null;
+            RequiredValue.BorderBrush = Brushes.Gray;
+        }
 
+        private void ParameterName_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var a = DataContext as Test2VM;
+            a.ParameterNameVM = null;
+            ParameterName.BorderBrush = Brushes.Gray;
+        }
+
+        private void MeasuredValue_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            var a = DataContext as Test2VM;
+            a.MeasuredValueVM = null;
+            MeasuredValue.BorderBrush = Brushes.Gray;
         }
     }
 }
