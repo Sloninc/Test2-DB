@@ -7,7 +7,6 @@ using Test2.Data;
 using Test2.Services;
 using Test2.Services.Abstract;
 using Test2.ViewModel;
-
 using System.Windows;
 
 namespace Test2

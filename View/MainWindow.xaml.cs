@@ -18,6 +18,7 @@ namespace Test2.View
         }
         GridViewColumnHeader _lastHeaderClicked = null;
         ListSortDirection _lastDirection = ListSortDirection.Ascending;
+        //Сортировка по столбцам
         void GridViewColumnHeaderClickedHandler(object sender,
                                                 RoutedEventArgs e)
         {
@@ -45,8 +46,6 @@ namespace Test2.View
                             direction = ListSortDirection.Ascending;
                         }
                     }
-                    //var columnBinding = headerClicked.Column.DisplayMemberBinding as Binding;
-                    //var sortBy = columnBinding?.Path.Path ?? headerClicked.Column.Header as string;
                     var columnBinding = headerClicked.Column.Header as TextBlock;
                     var sortBy = columnBinding?.Text;
                     Sort(sortBy, direction, listView);
@@ -62,7 +61,6 @@ namespace Test2.View
                           Resources["HeaderTemplateArrowDown"] as DataTemplate;
                     }
 
-                    // Remove arrow from previously sorted header
                     if (_lastHeaderClicked != null && _lastHeaderClicked != headerClicked)
                     {
                         _lastHeaderClicked.Column.HeaderTemplate = null;
@@ -83,6 +81,7 @@ namespace Test2.View
             dataView.Refresh();
         }
 
+        //отображение всех параметров теста
         private void Test_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var block = e.OriginalSource as ScrollViewer;
@@ -97,6 +96,7 @@ namespace Test2.View
             context.OpenTestViewWindowMethod();
         }
 
+        //вызов контекстного меню
         private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             var textBlock = e.OriginalSource as ScrollViewer;

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Test2.Data;
 using Test2.Model;
 using Test2.Services.Abstract;

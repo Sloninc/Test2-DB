@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using Test2.View;
-using Test2.Services;
 using Test2.Services.Abstract;
 using Test2.Model;
 using System.Collections.Generic;
-using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -58,11 +56,6 @@ namespace Test2.ViewModel
             {
                 return _parametersService.GetAllPerTest(SelectedTest.TestId);
             }
-            //private set
-            //{
-            //    _allParameters = value;
-            //    NotifyPropertyChanged("AllParameters");
-            //}
         }
         //свойства для Теста
         private DateTime _testDateVM;
@@ -131,17 +124,26 @@ namespace Test2.ViewModel
                 return _addNewTest ?? new RelayCommand(obj =>
                 {
                     Window wnd = obj as Window;
-                    string resultStr = "";
-                    if (BlockNameVM == null || BlockNameVM.Replace(" ", "").Length == 0)
+                    try
                     {
-                        SetColorBlockControll(wnd, "BlockName", ChoiceBorderColor.red);
+                        string resultStr = "";
+                        if (BlockNameVM == null || BlockNameVM.Replace(" ", "").Length == 0)
+                        {
+                            SetColorBlockControll(wnd, "BlockName", ChoiceBorderColor.red);
+                        }
+                        else
+                        {
+                            var test = _testsService.Create(new Test { TestDate = TestDateVM, BlockName = BlockNameVM, Note = NoteVM });
+                            resultStr = $"Тест {test.TestId} для блока:\n {test.BlockName}\n создан";
+                            UpdateAllDataView();
+                            ShowMessageToUser(resultStr);
+                            SetNullValuesToProperties();
+                            wnd.Close();
+                        }
                     }
-                    else
+                    catch (Exception)
                     {
-                        var test = _testsService.Create(new Test { TestDate = TestDateVM, BlockName = BlockNameVM, Note = NoteVM });
-                        resultStr = $"Тест {test.TestId} для блока:\n {test.BlockName}\n создан";
-                        UpdateAllDataView();
-                        ShowMessageToUser(resultStr);
+                        ShowMessageToUser("Не удалось добавить тест");
                         SetNullValuesToProperties();
                         wnd.Close();
                     }
@@ -176,12 +178,9 @@ namespace Test2.ViewModel
                             wnd.Close();
                         }
                     }
-                   catch(Exception ex)
+                   catch(Exception)
                     {
-                        if(ex.InnerException==null)
-                            ShowMessageToUser(ex.Message);
-                        else
-                            ShowMessageToUser(ex.InnerException.Message);
+                        ShowMessageToUser("Не удалось добавить параметр");
                         SetNullValuesToProperties();
                         wnd.Close();
                     }
